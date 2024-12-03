@@ -15,11 +15,7 @@ import tugaskelas.c14220163.roomdatabase.database.daftarBelanjaDB
 import tugaskelas.c14220163.roomdatabase.helper.DateHelper.getCurrentDate
 
 class TambahDaftar : AppCompatActivity() {
-    var _btnTambah = findViewById<Button>(R.id.btnTambah)
-    var _btnUpdate = findViewById<Button>(R.id.btnUpdate)
-    var _etItem = findViewById<EditText>(R.id.etItem)
-    var _etJumlah = findViewById<EditText>(R.id.etJumlah)
-    var DB = daftarBelanjaDB.getDatabase(this)
+
     var _tanggal = getCurrentDate()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +27,11 @@ class TambahDaftar : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val _btnTambah = findViewById<Button>(R.id.btnTambah)
+        val _btnUpdate = findViewById<Button>(R.id.btnUpdate)
+        val _etItem = findViewById<EditText>(R.id.etItem)
+        val _etJumlah = findViewById<EditText>(R.id.etJumlah)
+        val DB = daftarBelanjaDB.getDatabase(this)
         _btnTambah.setOnClickListener {
             CoroutineScope(Dispatchers.IO).async{
                 DB.fundaftarBelanjaDAO().insert(

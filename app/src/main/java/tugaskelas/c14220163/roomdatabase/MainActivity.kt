@@ -15,7 +15,6 @@ import tugaskelas.c14220163.roomdatabase.database.daftarBelanjaDB
 
 class MainActivity : AppCompatActivity() {
     private lateinit var DB : daftarBelanjaDB
-    var _fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //inisialisasi database
@@ -29,9 +28,14 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val _fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
         _fabAdd.setOnClickListener {
             startActivity(Intent(this, TambahDaftar::class.java))
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
         super.onStart()
         CoroutineScope(Dispatchers.Main).async {
             val daftarBelanja = DB.fundaftarBelanjaDAO().selectAll()
