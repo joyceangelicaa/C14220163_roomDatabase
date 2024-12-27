@@ -26,6 +26,12 @@ interface daftarBelanjaDAO {
     @Query("SELECT * FROM daftarBelanja ORDER BY id asc")
     fun selectAll(): MutableList<daftarBelanja>
 
-    @Query("SELECT * FROM daftarBelanja WHERE id=:isi_id")
-    suspend fun getItem(isi_id: Int): daftarBelanja
+    @Query("SELECT * FROM daftarBelanja WHERE id =:id")
+    suspend fun getItem(id: Int): daftarBelanja
+
+    @Query("SELECT * FROM daftarBelanja WHERE status = 0 ORDER BY id ASC")
+    fun selectActiveItems(): List<daftarBelanja>
+
+    @Query("SELECT * FROM daftarBelanja WHERE status = 1 ORDER BY id ASC")
+    fun selectHistory(): List<daftarBelanja>
 }

@@ -55,22 +55,23 @@ class adapterDaftar(private val daftarBelanja: MutableList<daftarBelanja>) :
             val intent = Intent(holder.itemView.context, TambahDaftar::class.java)
             intent.putExtra("id", daftar.id)
             intent.putExtra("addEdit", 1)
+            it.context.startActivity(intent)
         }
 
         holder._btnDelete.setOnClickListener {
             onItemClickCallback.delData(daftar)
         }
 
-//        holder._btnDone.setOnClickListener {
-//            val intent = it.context
-//            val db = daftarBelanjaDB.getDatabase(it.context)
-//            CoroutineScope(Dispatchers.IO).launch {
-//                db.fundaftarBelanjaDAO().updateStatus(daftar.id)
-//            }
-//
-//            daftarBelanja.removeAt(holder.adapterPosition)
-//            notifyItemRemoved(holder.adapterPosition)
-//        }
+        holder._btnDone.setOnClickListener {
+            val intent = it.context
+            val db = daftarBelanjaDB.getDatabase(it.context)
+            CoroutineScope(Dispatchers.IO).launch {
+                db.fundaftarBelanjaDAO().updateStatus(daftar.id)
+            }
+
+            daftarBelanja.removeAt(holder.adapterPosition)
+            notifyItemRemoved(holder.adapterPosition)
+        }
     }
     override fun getItemCount(): Int {
         return daftarBelanja.size

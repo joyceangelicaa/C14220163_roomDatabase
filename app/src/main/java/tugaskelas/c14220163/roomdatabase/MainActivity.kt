@@ -13,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tugaskelas.c14220163.roomdatabase.database.daftarBelanja
 import tugaskelas.c14220163.roomdatabase.database.daftarBelanjaDB
@@ -42,12 +43,13 @@ class MainActivity : AppCompatActivity() {
 
         super.onStart()
         CoroutineScope(Dispatchers.Main).async {
-            val daftarBelanja = DB.fundaftarBelanjaDAO().selectAll()
+            val daftarBelanja = DB.fundaftarBelanjaDAO().selectActiveItems()
             Log.d("data ROOM", daftarBelanja.toString())
             adapterDaftar.isiData(daftarBelanja)
         }
 
         adapterDaftar = adapterDaftar(arDaftar)
+
         var _rvDaftar = findViewById<RecyclerView>(R.id.rvNotes)
         _rvDaftar.layoutManager = LinearLayoutManager(this)
         _rvDaftar.adapter = adapterDaftar
@@ -57,14 +59,29 @@ class MainActivity : AppCompatActivity() {
                 override fun delData(dtBelanja: daftarBelanja) {
                     CoroutineScope(Dispatchers.IO).async {
                         DB.fundaftarBelanjaDAO().delete(dtBelanja)
-                        val daftar = DB.fundaftarBelanjaDAO().selectAll()
+                        val daftar = DB.fundaftarBelanjaDAO().selectActiveItems()
                         withContext(Dispatchers.Main) {
                             adapterDaftar.isiData(daftar)
                         }
                     }
                 }
             })
+
+        val _fabHistory = findViewById<FloatingActionButton>(R.id.btnHistory)
+        _fabHistory.setOnClickListener {
+            startActivity(Intent(this, HistoryActivity::class.java))
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        CoroutineScope(Dispatchers.IO).launch {
+            val activeItems = DB.fundaftarBelanjaDAO().selectActiveItems()
+            withContext(Dispatchers.Main) {
+                adapterDaftar.isiData(activeItems)
+            }
+        }
     }
 }
+
 
 
